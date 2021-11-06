@@ -200,11 +200,12 @@ async function showHopOut() {
 	window.bchPoolTimer = setInterval(updatePoolBalance, 12000);
 
 	const addrList = getRecentAddressList();
-	if(addrList.length == 0) return;
-	const addrTbl = makeHisAddrTable(addrList);
-	const hint = T("Following is some recipient addresses you used before. You can click one to use it for this time://以下是一些您之前使用过的收款地址，可点击其中一个作为此次收款地址：")
-	var hisAddrTable = document.getElementById("hisAddrTable")
-	hisAddrTable.innerHTML = "<p><br>"+hint+"</p>"+addrTbl;
+	if(addrList.length != 0) {
+		const addrTbl = makeHisAddrTable(addrList);
+		const hint = T("Following is some recipient addresses you used before. You can click one to use it for this time://以下是一些您之前使用过的收款地址，可点击其中一个作为此次收款地址：")
+		var hisAddrTable = document.getElementById("hisAddrTable")
+		hisAddrTable.innerHTML = "<p><br>"+hint+"</p>"+addrTbl;
+	}
 
 	document.getElementById("hopOutDiv").style.display = "block";
 }
