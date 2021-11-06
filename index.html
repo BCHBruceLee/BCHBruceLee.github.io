@@ -286,7 +286,7 @@ async function showCCTransLogs(divId, provider, ccTargetAddr, fromBlock) {
 	filter.fromBlock = fromBlock;
 	var logs = await provider.getLogs(filter);
 	//console.log("found logs", logs);
-	for(var i=0; i<logs.length; i++) {
+	for(var i=logs.length-1; i>=0; i--) {
 		const h = logs[i].blockNumber
 		fromBlock = h + 1;
 		const amount = ethers.utils.formatUnits(logs[i].data);
@@ -306,10 +306,13 @@ function AddToDiv(divId, text, linkNode) {
 
 // Show historical cross-chain transfer history in the "inHistoryList" Div
 async function showInHistoryList() {
+	document.getElementById("inHistoryBtn").disabled = true; //disable it to prevent the user clicking again
+	document.getElementById("inHistoryList").innerHTML = "";
 	const provider = new ethers.providers.Web3Provider(window.ethereum);
 	const signer = provider.getSigner();
 	const ccTargetAddr = await signer.getAddress();
 	await showCCTransLogs("inHistoryList", provider, ccTargetAddr, 0);
+	document.getElementById("inHistoryBtn").disabled = false;
 }
 
 // Load the recently used address from localStorage
