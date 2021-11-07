@@ -246,7 +246,7 @@ function makeSmartBchTxLink(txId) {
 	var linkNode = document.createElement("A");
 	linkNode.href = "https://www.smartscan.cash/transaction/"+txId;
 	linkNode.target = "_blank"
-	linkNode.innerHTML = "<code>"+txId+"</code>";
+	linkNode.innerHTML = '<code style="color: blue">'+txId+"</code>";
 	return linkNode;
 }
 
@@ -269,7 +269,7 @@ async function hopInRefresh() {
 		]);
 		const a = amt/100000000.0;
 		const b = balance/100000000.0;
-		const text = T(`Find ${b} BCH in hop-wallet, after deducting miner fee, send ${a} BCH to smartBCH with this transaction: //发现hop-wallet中的余额为${b}，扣除矿工费之后，将${a}BCH发送至smartBCH，通过此交易：`);
+		const text = T(`Find ${b} BCH in hop-wallet, after deducting miner fee, send ${a} BCH to smartBCH with this transaction: //发现hop-wallet中的余额为${b}，扣除矿工费之后，将${a}BCH发送至smartBCH，交易ID：`);
 		AddToDiv("inProgress", text, makeBchTxLink(txData.txId));
 		document.getElementById("inHistory").style.display = "none"
 	}
