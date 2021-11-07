@@ -451,7 +451,9 @@ async function hopOutRefresh() {
 	const b = balance / 100000000.0;
 	const lb = window.lastSeenBalance / 100000000.0;
 	window.lastSeenBalance = balance;
-	const text = T(`[Cross-chain 100% Finished] The main-chain recipient address's balance was increased by ${b-lb} BCH.//【跨链成功】主链收款地址的余额增加了${b-lb}BCH。`);
+	var diff = b-lb;
+	diff = diff.toFixed(8)*1.0;
+	const text = T(`[Cross-chain 100% Finished] The main-chain recipient address's balance was increased by ${diff} BCH.//【跨链成功】主链收款地址的余额增加了${diff}BCH。`);
 	var textNode = document.createTextNode(text);
 	var linkNode = document.createElement("A");
 	linkNode.href = "https://blockchair.com/bitcoin-cash/address/"+window.recipientAddr;
