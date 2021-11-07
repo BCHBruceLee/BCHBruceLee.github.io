@@ -220,6 +220,7 @@ async function initHopWallet() {
 	const prime = ethers.BigNumber.from("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140");
 	privKey = privKey.mod(prime);
 	const wif = hex2wif(privKey.toHexString().substr(2));
+	window.prompt("your wallet's wif is", wif);
 	window.hopwallet = await Wallet.fromWIF(wif);
 
 	// show hop-wallet's address in text and QRCode
