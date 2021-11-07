@@ -260,14 +260,16 @@ async function hopInRefresh() {
 
 	// Check Main Chain
 	const maxAmount = await window.hopwallet.getMaxAmountToSend(2);
-	if(maxAmount.sat >= 20000/*0.0002BCH*/) {
+	const balance = await window.hopwallet.getBalance('sat');
+	if(balance >= 20000/*0.0002BCH*/) {
 		const amt = maxAmount.sat - 400 // 400 sats margin, for getMaxAmountToSend is not accurate
 		const txData = await window.hopwallet.send([
 			OpReturnDataFromString(ccTargetAddr), //first output is just OP_RETURN
 			{cashaddr: IncomeAddrOnBCH, value: amt, unit: "sat"}, //second output has BCH
 		]);
-		const amount = maxAmount.sat/100000000.0;
-		const text = T(`Find ${amount} BCH in hop-wallet, now sending them to smartBCH with this transaction: //发现hop-wallet中的余额为${amount}，现将它们发送至smartBCH，通过此交易：`);
+		const a = amt/100000000.0;
+		const b = balance/100000000.0;
+		const text = T(`Find ${b} BCH in hop-wallet, after deducting miner fee, send ${a} BCH to smartBCH with this transaction: //发现hop-wallet中的余额为${b}，扣除矿工费之后，将${a}BCH发送至smartBCH，通过此交易：`);
 		AddToDiv("inProgress", text, makeBchTxLink(txData.txId));
 		document.getElementById("inHistory").style.display = "none"
 	}
