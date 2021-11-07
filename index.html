@@ -163,8 +163,6 @@ const PoolAddrOnBCH = "bitcoincash:qrvsgv8j5ed2fdfxwxk7d895uqw373j8fcmzqtcwzt"
 const IncomeAddrOnSmartBCH = "0x1c4DCD2153Eb0f5267CB2511D327B39800E7197b"
 // The outgoing account's address on smartBCH side chain
 const PoolAddrOnSmartBCH = "0xA3f4C7404862DbAc5249b836938daD9849ab91ce"
-// The hop-wallet pay this miner fee when sending coins to IncomeAddrOnBCH
-const MinerFee = 800 //in satoshi
 
 // To show the hopInDiv, we need to show PoolAddrOnSmartBCH's balance and initialize the hop-wallet
 async function showHopIn() {
@@ -220,7 +218,6 @@ async function initHopWallet() {
 	const prime = ethers.BigNumber.from("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140");
 	privKey = privKey.mod(prime);
 	const wif = hex2wif(privKey.toHexString().substr(2));
-	window.prompt("your wallet's wif is", wif);
 	window.hopwallet = await Wallet.fromWIF(wif);
 
 	// show hop-wallet's address in text and QRCode
@@ -262,13 +259,14 @@ async function hopInRefresh() {
 	const ccTargetAddr = await signer.getAddress();
 
 	// Check Main Chain
-	const balance = await window.hopwallet.getBalance('sat');
-	if(balance >= 20000/*0.0002BCH*/) {
+	const maxAmount = await window.hopwallet.getMaxAmountToSend(2);
+	if(maxAmount.sat >= 20000/*0.0002BCH*/) {
+		const amt = maxAmount.sat - 400 // 400 sats margin, for getMaxAmountToSend is not accurate
 		const txData = await window.hopwallet.send([
 			OpReturnDataFromString(ccTargetAddr), //first output is just OP_RETURN
-			{cashaddr: IncomeAddrOnBCH, value: balance-MinerFee, unit: "sat"}, //second output has BCH
+			{cashaddr: IncomeAddrOnBCH, value: amt, unit: "sat"}, //second output has BCH
 		]);
-		const amount = balance/100000000.0;
+		const amount = maxAmount.sat/100000000.0;
 		const text = T(`Find ${amount} BCH in hop-wallet, now sending them to smartBCH with this transaction: //发现hop-wallet中的余额为${amount}，现将它们发送至smartBCH，通过此交易：`);
 		AddToDiv("inProgress", text, makeBchTxLink(txData.txId));
 		document.getElementById("inHistory").style.display = "none"
