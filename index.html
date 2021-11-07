@@ -269,7 +269,7 @@ async function hopInRefresh() {
 		]);
 		const a = amt/100000000.0;
 		const b = balance/100000000.0;
-		const text = T(`Find ${b} BCH in hop-wallet, after deducting miner fee, send ${a} BCH to smartBCH with this transaction: //发现hop-wallet中的余额为${b}，扣除矿工费之后，将${a}BCH发送至smartBCH，交易ID：`);
+		const text = T(`[Cross-Chain 50% Finished] Find ${b} BCH in hop-wallet, after deducting miner fee, send ${a} BCH to cross-chain bridge with this transaction: //【跨链完成50%】发现hop钱包中的余额为${b}，扣除矿工费之后，${a}个BCH已被发送至跨链桥，交易ID：`);
 		AddToDiv("inProgress", text, makeBchTxLink(txData.txId));
 		document.getElementById("inHistory").style.display = "none"
 	}
@@ -292,7 +292,7 @@ async function showCCTransLogs(divId, provider, ccTargetAddr, fromBlock) {
 		const h = logs[i].blockNumber
 		fromBlock = h + 1;
 		const amount = ethers.utils.formatUnits(logs[i].data);
-		const text = T(`On smartBCH, at height ${h}, ${amount} BCH were sent to your account in this transaction: //在smartBCH上，区块高度为${h}时，数额为${amount}的BCH被发送至您的账户，通过此交易：`);
+		const text = T(`[Cross-chain Finished] After deduct the cross-chain fee, ${amount} BCH were sent to your smartBCH account at height ${h}, in this transaction: //【跨链成功】扣除跨链手续费之后，${amount}个BCH被发送至您的smartBCH账户，区块高度${h}，交易ID：`);
 		AddToDiv(divId, text, makeSmartBchTxLink(logs[i].transactionHash));
 	}
 	return fromBlock;
@@ -301,9 +301,14 @@ async function showCCTransLogs(divId, provider, ccTargetAddr, fromBlock) {
 function AddToDiv(divId, text, linkNode) {
 	var textNode = document.createTextNode(text);
 	var node = document.createElement("P");
+	node.style.marginTop = "6px"
 	node.appendChild(textNode);
 	node.appendChild(linkNode);
 	document.getElementById(divId).appendChild(node);
+	node = document.createElement("P");
+	//node.innerHTML = "<br>"
+	//node.style.font = "6px"
+	//document.getElementById(divId).appendChild(node);
 }
 
 // Show historical cross-chain transfer history in the "inHistoryList" Div
