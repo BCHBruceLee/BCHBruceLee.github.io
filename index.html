@@ -230,8 +230,8 @@ async function initHopWallet() {
 
 	// hop-wallet will watch the incoming coins inside the hopInRefresh function
 	window.FromBlock = await provider.getBlockNumber();
-        clearInterval(window.refreshTimer);
-        window.refreshTimer = setInterval(hopInRefresh, 6000);
+        clearInterval(window.hopInRefreshTimer);
+        window.hopInRrefreshTimer = setInterval(hopInRefresh, 6000);
 }
 
 function makeBchTxLink(txId) {
@@ -440,8 +440,8 @@ async function smartBCH_to_BCH() {
 	document.getElementById("hopOutTxInfo").style.display = "block";
 
 	// Watch the balance of recipientWallet in the "hopOutRefresh" function
-        clearInterval(window.refreshTimer);
-        window.refreshTimer = setInterval(hopOutRefresh, 6000);
+        clearInterval(window.hopOutRefreshTimer);
+        window.hopOutRefreshTimer = setInterval(hopOutRefresh, 6000);
 }
 
 // If the balance of recipientWallet changes, add notification into the "outProgress" div
