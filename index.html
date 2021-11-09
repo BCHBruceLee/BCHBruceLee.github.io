@@ -1,6 +1,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="icon" href="favicon.png" />
 <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
 <script src="https://unpkg.com/bchaddrjs@0.5.2/dist/bchaddrjs-0.5.2.min.js"></script>
@@ -281,9 +282,10 @@ async function showCCTransLogs(divId, provider, ccTargetAddr, fromBlock) {
 	// Check Side Chain's Transfer event, because coins are send through SEP206 calls
 	const Transfer = ethers.utils.id("Transfer(address,address,uint256)");
 	const myAddrPad32 = ethers.utils.hexZeroPad(ccTargetAddr, 32);
+	const senderAddrPad32 = ethers.utils.hexZeroPad(PoolAddrOnSmartBCH, 32);
 	var tokenIdList = [];
 	const sep206Addr = "0x0000000000000000000000000000000000002711";
-	var filter = {address: sep206Addr, topics: [Transfer, null/*sender*/, myAddrPad32/*receiver*/]};
+	var filter = {address: sep206Addr, topics: [Transfer, senderAddrPad32, myAddrPad32/*receiver*/]};
 	filter.toBlock = 10000*10000 // a very large value
 	filter.fromBlock = fromBlock;
 	var logs = await provider.getLogs(filter);
